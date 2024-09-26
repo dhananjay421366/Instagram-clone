@@ -10,7 +10,7 @@ import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { setAuthUser } from '@/redux/AuthSlice';
 import { readFileAsDataURI } from '@/lib/utils';
-// now every thing id done
+
 export const EditProfile = () => {
   const { user } = useSelector((store) => store.auth);
   const imageref = useRef();
@@ -27,22 +27,22 @@ export const EditProfile = () => {
   // Store the actual file for upload
   const [profilePictureFile, setProfilePictureFile] = useState(null);
 
-  const imageRef = useRef();
   const fileChangeHandler = async (e) => {
-    const file = e.target.files?.[0]
+    const file = e.target.files?.[0];
     if (file) {
-      setProfilePictureFile(file)
+      setProfilePictureFile(file);
+      const dataURL = await readFileAsDataURI(file);
+      setInput((prev) => ({ ...prev, profilePhoto: dataURL }));
     }
-    const dataURL = await readFileAsDataURI(file)
-    setProfilePictureFile(dataURL)
-  }
+  };
+
   const editProfileHandler = async () => {
     try {
       const formData = new FormData();
 
       // Append the file only if a new one is selected
       if (profilePictureFile) {
-        formData.append("profilePicture", profilePictureFile); // Attach the actual file
+        formData.append('profilePicture', profilePictureFile); // Attach the actual file
       }
 
       formData.append('Bio', input.Bio);
@@ -58,7 +58,7 @@ export const EditProfile = () => {
 
       if (response?.data?.success) {
         const updatedUser = response.data.data; // Expect the updated user from the backend
-        console.log(updatedUser)
+
         // Update Redux store with the new profile data
         const updatedUserData = {
           ...user,
@@ -72,9 +72,7 @@ export const EditProfile = () => {
             },
           },
         };
-        // console.log(updatedUserData)
         dispatch(setAuthUser(updatedUserData));
-        // console.log(user)
         navigate(`/${user?.data?.user?._id}/profile`);
         toast.success(response.data.message);
       } else {
@@ -157,6 +155,5 @@ export const EditProfile = () => {
     </div>
   );
 };
-
 
 
