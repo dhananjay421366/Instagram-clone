@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { AtSign, Heart, MessageCircle } from "lucide-react";
 import { useState } from "react";
-//  Nimbalkar dhananjay  done
+//  Nimbalkar dhananjay 
 export const Profile = () => {
   const params = useParams();
   const userId = params.id;
