@@ -121,29 +121,33 @@ export const Profile = () => {
         <div className="border-t border-gray-200 pt-4">
           <div className="flex justify-center items-center gap-6 text-sm">
             <span
-              className={`py-2 cursor-pointer ${activeTab === "posts" ? "font-bold" : ""
-                }`}
+              className={`py-2 cursor-pointer ${
+                activeTab === "posts" ? "font-bold" : ""
+              }`}
               onClick={() => handleTabChange("posts")}
             >
               POSTS
             </span>
             <span
-              className={`py-2 cursor-pointer ${activeTab === "saved" ? "font-bold" : ""
-                }`}
+              className={`py-2 cursor-pointer ${
+                activeTab === "saved" ? "font-bold" : ""
+              }`}
               onClick={() => handleTabChange("saved")}
             >
               SAVED
             </span>
             <span
-              className={`py-2 cursor-pointer ${activeTab === "reels" ? "font-bold" : ""
-                }`}
+              className={`py-2 cursor-pointer ${
+                activeTab === "reels" ? "font-bold" : ""
+              }`}
               onClick={() => handleTabChange("reels")}
             >
               REELS
             </span>
             <span
-              className={`py-2 cursor-pointer ${activeTab === "tags" ? "font-bold" : ""
-                }`}
+              className={`py-2 cursor-pointer ${
+                activeTab === "tags" ? "font-bold" : ""
+              }`}
               onClick={() => handleTabChange("tags")}
             >
               TAGS

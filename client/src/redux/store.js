@@ -1,39 +1,4 @@
-// import { combineReducers, configureStore } from "@reduxjs/toolkit";
-// import AuthSlice from "./AuthSlice";
-// import {
-//   persistStore,
-//   persistReducer,
-//   FLUSH,
-//   REHYDRATE,
-//   PAUSE,
-//   PERSIST,
-//   PURGE,
-//   REGISTER,
-// } from "redux-persist";
-// import storage from "redux-persist/lib/storage";
-// import { PersistGate } from "redux-persist/integration/react";
-// import rootReducer from "./reducers";
 
-// const persistConfig = {
-//   key: "root",
-//   version: 1,
-//   storage,
-// };
-
-// const persistedReducer = persistReducer(persistConfig, rootReducer);
-// const rootReducer = combineReducers({
-//   auth: AuthSlice,
-// });
-
-// const store = configureStore({
-//   reducer: persistedReducer,
-//   middleware: (getDefaultMiddleware) =>
-//     getDefaultMiddleware({
-//       serializableCheck: {
-//         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-//       },
-//     }),
-// });
 
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import {
@@ -50,6 +15,8 @@ import storage from "redux-persist/lib/storage";
 
 import AuthSlice from "./AuthSlice";
 import postSlice from "./postSlice";
+import socketSlice from "./Socketlice";
+import chatSlice from "./chatSlice";
 
 const persistConfig = {
   key: "root",
@@ -58,7 +25,9 @@ const persistConfig = {
 };
 const rootReducer = combineReducers({
   auth: AuthSlice,
-  post:postSlice
+  post: postSlice,
+  socket: socketSlice,
+  chat: chatSlice
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
