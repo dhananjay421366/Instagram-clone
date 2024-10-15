@@ -1,43 +1,24 @@
-import React from "react";
-import { Avatar, AvatarImage } from "./ui/avatar";
-import { AvatarFallback } from "@radix-ui/react-avatar";
-import { Link } from "react-router-dom";
-import { Button } from "./ui/button";
+import React from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
-export const Messages = ({ selectedUser }) => {
-    
+export const Messages = ({ selectedUser, messages }) => {
     return (
-        <div className="overflow-y-auto flex-1 p-4  border-l border-gray-700">
-            <div className="flex justify-center ">
-                <div className="flex flex-col items-center justify-center">
-                    <Avatar className='h-20 w-20'>
-                        <AvatarImage src={selectedUser?.profilePicture} />
-                        <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                    <span>{selectedUser?.username}</span>
-                    <Link to={`/${selectedUser?._id}/profile`}>
-                        <Button className='h-8 my-2 ' variant='secondary'>View Profile</Button>
-                    </Link>
-                </div>
-            </div>
-            <div  className="flex flex-col gap-3">
-                {/* Messages */}
-                {/* Add your code here */}
-                {
-                    [1, 2, 3, 4].map((msg) => {
-                        return (
-                            <div className={`flex`}>
-                                <div>
-                                    {
-                                        msg
-                                    }
-                                </div>
-                            </div>
-                        )
-
-                    })
-                }
-            </div>
+        <div className="flex-1 p-4 overflow-y-auto">
+            {messages && messages.length > 0 ? (
+                messages.map((msg) => (
+                    <div
+                        key={msg._id}
+                        className={`flex ${msg.senderId === selectedUser._id ? "justify-end" : "justify-start"} mb-2`}
+                    >
+                        <div className="max-w-xs bg-gray-800 text-white p-2 rounded-lg">
+                            {/* Ensure you are accessing the correct property here */}
+                            <p>{msg.message}</p>
+                        </div>
+                    </div>
+                ))
+            ) : (
+                <p>No messages yet.</p>
+            )}
         </div>
     );
 };

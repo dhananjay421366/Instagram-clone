@@ -25,5 +25,3 @@ export const shuffleArray = (array) => {
   }
   return array;
 };
-
-

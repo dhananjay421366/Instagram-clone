@@ -1,11 +1,12 @@
 // index.js
 import http from "http";
 import { Server } from "socket.io";
-import dotenv from "dotenv";
 import connectDB from "./db/index.js"; // Assuming your database connection logic is in `db/index.js`
 import { app } from "./app.js"; // Import the configured Express app from `app.js`
 
+import dotenv from 'dotenv';
 dotenv.config();
+
 
 // Create HTTP server and initialize Socket.io
 const server = http.createServer(app);

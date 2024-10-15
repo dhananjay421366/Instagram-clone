@@ -26,16 +26,19 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRoutes from "./routes/user.routes.js";
 import postRoutes from "./routes/post.routes.js";
-import dotenv from "dotenv";
+import msgRoutes from "./routes/message.routes.js";
 
+import dotenv from 'dotenv';
 dotenv.config();
+
 
 // Create Express app instance
 const app = express();
 
 // Middleware Configuration
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "16kb" }));
+app.use(express.urlencoded({ limit: "16kb", extended: true }));
+app.use(express.static("public"));
 app.use(cookieParser());
 
 // CORS Configuration
@@ -49,5 +52,6 @@ app.use(
 // Define Routes
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/posts", postRoutes);
+app.use("/api/v1/message", msgRoutes);
 
 export { app };

@@ -120,7 +120,7 @@ const login = asyncHandler(async (req, res) => {
           accessToken,
           refreshToken,
         },
-        "User loggedIn successfully"
+        ` ${user?.username} loggedIn successfully"`
       )
     );
 });
@@ -182,7 +182,6 @@ const getProfile = asyncHandler(async (req, res) => {
   }
 });
 
-
 const changePassword = asyncHandler(async (req, res) => {
   const { oldPassword, newPassword } = req.body;
 
@@ -201,47 +200,94 @@ const changePassword = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "Password changed successfully"));
 });
 
+// const editProfile = asyncHandler(async (req, res) => {
+//   try {
+//     const userId = req.user.id;
+
+//     // Check if userId is valid
+//     if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+//       return res
+//         .status(400)
+//         .json(new ApiResponse(400, null, "Invalid User ID"));
+//     }
+
+//     let user = await User.findById(userId);
+//     if (!user) {
+//       return res.status(404).json(new ApiResponse(404, null, "User not found"));
+//     }
+
+//     const { Bio, gender } = req.body;
+//     const profileFile = req.file; // Assuming multer is being used to handle file uploads
+//    console.log(profileFile);
+//    if (profileFile) {
+//     const  profileUrl = await uploadOnCloudinary(profileFile);
+//     console.log(profileUrl?.url);
+
+//    }
+
+//     // Only update fields that are provided
+//     user.Bio = Bio || user.Bio;
+//     user.gender = gender || user.gender;
+
+//     await user.save();
+
+//     return res.json(
+//       new ApiResponse(200, user, "User profile updated successfully")
+//     );
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json(new ApiResponse(500, null, "Server error"));
+//   }
+// });
 const editProfile = asyncHandler(async (req, res) => {
   try {
     const userId = req.user.id;
 
-    // Check if userId is valid
+    // Validate the user ID
     if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
-      return res
-        .status(400)
-        .json(new ApiResponse(400, null, "Invalid User ID"));
+      return res.status(400).json({ error: "Invalid User ID" });
     }
 
+    // Find user by ID
     let user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json(new ApiResponse(404, null, "User not found"));
+      return res.status(404).json({ error: "User not found" });
     }
 
     const { Bio, gender } = req.body;
-    const profileFile = req.file; // Assuming multer is being used to handle file uploads
+    const profileFile = req.file;
+
+    // Log req.file to verify file upload
+    console.log("File received from Multer:", profileFile);
 
     if (profileFile) {
-      // Handle file upload, convert to base64 or store in a cloud storage
-      const imageBuffer = await fs.promises.readFile(profileFile.path);
-      const base64Image = `data:${profileFile.mimetype};base64,${imageBuffer.toString("base64")}`;
-      user.profilePicture = base64Image;
+      const localFilePath = profileFile.path; // Get the file path from multer
+
+      // Upload file to Cloudinary
+      const uploadResponse = await uploadOnCloudinary(localFilePath);
+
+      if (uploadResponse && uploadResponse.url) {
+        // Store the Cloudinary URL in the user profile
+        user.profilePicture = uploadResponse.url;
+      } else {
+        console.error("Failed to upload the file to Cloudinary");
+        return res.status(500).json({ error: "Cloudinary upload failed" });
+      }
     }
 
-    // Only update fields that are provided
+    // Update other profile fields
     user.Bio = Bio || user.Bio;
     user.gender = gender || user.gender;
 
+    // Save the updated user profile
     await user.save();
 
-    return res.json(
-      new ApiResponse(200, user, "User profile updated successfully")
-    );
+    return res.status(200).json({ message: "Profile updated successfully", user });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json(new ApiResponse(500, null, "Server error"));
+    console.error("Error updating profile:", error);
+    return res.status(500).json({ error: "Server error" });
   }
 });
-
 const getSuggestedUsers = asyncHandler(async (req, res) => {
   const suggestedUsers = await User.find({
     _id: { $ne: req.user._id },

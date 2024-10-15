@@ -1,5 +1,7 @@
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs"; // file system
+import dotenv from 'dotenv'; 
+dotenv.config(); // Make sure this is at the top before using Cloudinary
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -9,7 +11,10 @@ cloudinary.config({
 
 const uploadOnCloudinary = async (localFilePath) => {
   try {
-   
+    if (!localFilePath) {
+      return null;
+    }
+
     // upload the file on cloudinary
     const response = await cloudinary.uploader.upload(localFilePath, {
       resource_type: "auto",
@@ -29,4 +34,16 @@ const uploadOnCloudinary = async (localFilePath) => {
   }
 };
 
-export { uploadOnCloudinary };
+const deleteFromCloudinary = async (publicId) => {
+  try {
+    if (!publicId) {
+      return null;
+    }
+
+    await cloudinary.uploader.destroy(publicId);
+  } catch (error) {
+    console.error("Error while deleting old avatar from Cloudinary", error);
+  }
+};
+
+export { uploadOnCloudinary, deleteFromCloudinary };

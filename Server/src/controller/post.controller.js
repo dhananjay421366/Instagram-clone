@@ -6,6 +6,7 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { Post } from "../model/post.model.js";
 import { Comment } from "../model/comment.model.js";
 import fs from "fs"; // file system
+import { getReceiverSocketId } from "../socket/socket.js";
 
 // done
 const addNewPost = asyncHandler(async (req, res) => {
@@ -40,34 +41,6 @@ const addNewPost = asyncHandler(async (req, res) => {
     .status(201)
     .json(new ApiResponse("200", post, "New post added successfully"));
 });
-// const addNewPost = asyncHandler(async (req, res) => {
-//   const { caption } = req.body;
-//   const image = req.files?.image[0]?.path;
-//   const authorId = req.user?._id;
-//   if (!image) {
-//     throw new ApiError(404, "Image is required");
-//   }
-//   // upload image on cloudinary
-//   const uploadedImage = await uploadOnCloudinary(image);
-//   if (!uploadedImage) {
-//     throw new ApiError(404, "Error to uploading image file");
-//   }
-//   const post = await Post.create({
-//     caption,
-//     image: uploadedImage.url,
-//     author: authorId,
-//   });
-//   const user = await User.findById(authorId);
-//   if (user) {
-//     user.posts.push(post._id);
-//     console.log(post);
-//     await user.save();
-//   }
-//   await post.populate({ path: "author", select: "-password -refreshToken" }); // select an author and jump on author go on User model and select user details
-//   res
-//     .status(201)
-//     .json(new ApiResponse("200", post, "New post added successfully"));
-// });
 
 // get all post done
 const getAllPost = asyncHandler(async (req, res) => {
@@ -114,6 +87,22 @@ const likePost = asyncHandler(async (req, res) => {
   await post.updateOne({ $addToSet: { likes: likeKarneWakaUserId } }); // only one user add only one like using addToSet Method
   await post.save();
   // implement socket io for real time notification
+  const user = await User.findById(likeKarneWakaUserId).select(
+    "username profilePicture"
+  );
+
+  const postOwnerId = post.author.toString();
+
+  if (postOwnerId != likeKarneWakaUserId) {
+    const notification = {
+      type: "like",
+      userId: likeKarneWakaUserId,
+      userDetails: user,
+      message: "Your post was liked ",
+    };
+    const postOwnerSoketId = getReceiverSocketId(postOwnerId);
+    io.to(postOwnerSoketId).emit("notification", notification);
+  }
   res.status(200).json(new ApiResponse("200", post, "Post liked successfully"));
 });
 // done
@@ -128,6 +117,23 @@ const disLikePost = asyncHandler(async (req, res) => {
   await post.updateOne({ $pull: { likes: likeKarneWakaUserId } }); // only one user add only one like using addToSet Method
   await post.save();
   // implement socket io for real time notification
+  // implement socket io for real time notification
+  const user = await User.findById(likeKarneWakaUserId).select(
+    "username profilePicture"
+  );
+
+  const postOwnerId = post.author.toString();
+
+  if (postOwnerId != likeKarneWakaUserId) {
+    const notification = {
+      type: "dislike",
+      userId: likeKarneWakaUserId,
+      userDetails: user,
+      message: "Your post was dislike ",
+    };
+    const postOwnerSoketId = getReceiverSocketId(postOwnerId);
+    io.to(postOwnerSoketId).emit("notification", notification);
+  }
   res
     .status(200)
     .json(new ApiResponse("200", post, "Post disliked successfully"));

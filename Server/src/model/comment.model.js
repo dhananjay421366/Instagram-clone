@@ -16,6 +16,6 @@ const commentSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-mongoose.set('strictPopulate', false);
+mongoose.set("strictPopulate", false);
 
 export const Comment = mongoose.model("Comment", commentSchema);

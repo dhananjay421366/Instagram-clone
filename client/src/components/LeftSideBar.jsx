@@ -78,6 +78,9 @@ export const LeftSideBar = () => {
     } else if (textType === profileName) {
       navigate(`/${user?.data.user._id}/profile`);
     }
+    else if (textType === "Messages") {
+      navigate("/chat");
+    } 
   };
 
   console.log(user?.data)

@@ -125,11 +125,13 @@ import { io } from "socket.io-client";
 import { useEffect } from "react";
 import { setSocket } from "./redux/Socketlice";
 import { setOnlineUsers } from "./redux/chatSlice";
+import { setAuthUser } from "./redux/AuthSlice";
 
 
 function App() {
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.auth);
+  const { socket } = useSelector((store) => store.socket);
 
   useEffect(() => {
     if (user) {
@@ -149,9 +151,12 @@ function App() {
       });
 
       return () => {
-        socketio.disconnect();
+        socketio.close();
         dispatch(setSocket(null));
       };
+    } else {
+      socket?.close();
+      dispatch(setSocket(null));
     }
   }, [user, dispatch]);
 
