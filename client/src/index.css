@@ -93,3 +93,36 @@ body {
     font-size: 3rem;
   }
 }
+
+/* styles.css */
+.flex {
+  display: flex;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.object-cover {
+  object-fit: cover;
+}
+
+.border-b-2 {
+  border-bottom-width: 2px;
+}
+
+/* Optional: Adjust padding for better appearance */
+.py-10 {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* Optional: Adjust margins for better appearance */
+.lg\:ml-64 {
+  margin-left: 64px; /* Adjust based on your layout needs */
+}
+

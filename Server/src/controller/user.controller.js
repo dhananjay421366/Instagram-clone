@@ -239,6 +239,55 @@ const changePassword = asyncHandler(async (req, res) => {
 //     return res.status(500).json(new ApiResponse(500, null, "Server error"));
 //   }
 // });
+// const editProfile = asyncHandler(async (req, res) => {
+//   try {
+//     const userId = req.user.id;
+
+//     // Validate the user ID
+//     if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+//       return res.status(400).json({ error: "Invalid User ID" });
+//     }
+
+//     // Find user by ID
+//     let user = await User.findById(userId);
+//     if (!user) {
+//       return res.status(404).json({ error: "User not found" });
+//     }
+
+//     const { Bio, gender } = req.body;
+//     const profileFile = req.file;
+
+//     // Log req.file to verify file upload
+//     console.log("File received from Multer:", profileFile);
+
+//     if (profileFile) {
+//       const localFilePath = profileFile.path; // Get the file path from multer
+
+//       // Upload file to Cloudinary
+//       const uploadResponse = await uploadOnCloudinary(localFilePath);
+
+//       if (uploadResponse && uploadResponse.url) {
+//         // Store the Cloudinary URL in the user profile
+//         user.profilePicture = uploadResponse?.url;
+//       } else {
+//         console.error("Failed to upload the file to Cloudinary");
+//         return res.status(500).json({ error: "Cloudinary upload failed" });
+//       }
+//     }
+
+//     // Update other profile fields
+//     user.Bio = Bio || user.Bio;
+//     user.gender = gender || user.gender;
+
+//     // Save the updated user profile
+//     await user.save();
+
+//     return res.status(200).json({ message: "Profile updated successfully", user });
+//   } catch (error) {
+//     console.error("Error updating profile:", error);
+//     return res.status(500).json({ error: "Server error" });
+//   }
+// });
 const editProfile = asyncHandler(async (req, res) => {
   try {
     const userId = req.user.id;
@@ -268,7 +317,7 @@ const editProfile = asyncHandler(async (req, res) => {
 
       if (uploadResponse && uploadResponse.url) {
         // Store the Cloudinary URL in the user profile
-        user.profilePicture = uploadResponse.url;
+        user.profilePicture = uploadResponse?.url;
       } else {
         console.error("Failed to upload the file to Cloudinary");
         return res.status(500).json({ error: "Cloudinary upload failed" });
@@ -282,7 +331,12 @@ const editProfile = asyncHandler(async (req, res) => {
     // Save the updated user profile
     await user.save();
 
-    return res.status(200).json({ message: "Profile updated successfully", user });
+    // return res.status(200).json({ message: "Profile updated successfully", user });
+    return res
+    .status(200)
+    .json(
+      new ApiResponse(200,  user , "Profile updated successfully")
+    );
   } catch (error) {
     console.error("Error updating profile:", error);
     return res.status(500).json({ error: "Server error" });

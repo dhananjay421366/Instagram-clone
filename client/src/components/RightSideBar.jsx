@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { SuggestedUser } from './SuggestedUser'
 
 export const RightSideBar = () => {
-  const { user } = useSelector((store) => store.auth)
+  const { userProfile, user } = useSelector((store) => store.auth);
   console.log(user)
   return (
     <div className="w-fit my-10 pr-32  hidden md:block">
@@ -13,7 +13,7 @@ export const RightSideBar = () => {
         <Link to={`/${user?.data.user._id}/profile`}>
           <Avatar>
             <AvatarImage
-              src={user?.data.user.profilePicture}
+              src={userProfile?.profilePicture}
               alt="post_image" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>

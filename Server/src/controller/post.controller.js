@@ -6,7 +6,7 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { Post } from "../model/post.model.js";
 import { Comment } from "../model/comment.model.js";
 import fs from "fs"; // file system
-import { getReceiverSocketId } from "../socket/socket.js";
+import { getReceiverSocketId,io } from "../socket/socket.js";
 
 // done
 const addNewPost = asyncHandler(async (req, res) => {
@@ -17,15 +17,17 @@ const addNewPost = asyncHandler(async (req, res) => {
   if (!image) {
     throw new ApiError(404, "Image is required");
   }
-
-  // Read the file and convert it to a Base64 string
-  const imageBuffer = await fs.promises.readFile(image.path);
-  const base64Image = `data:${image.mimetype};base64,${imageBuffer.toString("base64")}`;
+  console.log("File received from Multer:", image);
+  const localFilePath = image?.path; // Get the file path from multer
+console.log(localFilePath);
+  // upload image file on cloudinary
+  const uploadedImage = await uploadOnCloudinary(localFilePath);
+  console.log("Post image is showed on console ,",uploadedImage);
 
   // Save the post to MongoDB with the Base64 image string
   const post = await Post.create({
     caption,
-    image: base64Image, // Store the image as a Base64 string
+    image: uploadedImage?.url, // Store the image as a Base64 string
     author: authorId,
   });
 

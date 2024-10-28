@@ -1,19 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
 const chatSlice = createSlice({
-    name: "chat",
-    initialState: {
-        onlineUsers: [],
-        messages :[]
+  name: "chat",
+  initialState: {
+    onlineUsers: [],
+    messages: [],
+  },
+  reducers: {
+    setOnlineUsers: (state, action) => {
+      state.onlineUsers = action.payload;
     },
-    reducers: {
-        setOnlineUsers: (state, action) => {
-            state.onlineUsers = action.payload;
-        },
-        setMessages: (state, action) => {
-            state.messages = action.payload;
-        },
+    setMessages: (state, action) => {
+      state.messages = Array.isArray(action.payload) ? action.payload : []; // Ensure payload is an array
     },
+    deleteMessage: (state, action) => {
+      // Remove the message from the messages array by filtering it out
+      state.messages = state.messages.filter(
+        (msg) => msg._id !== action.payload
+      );
+    },
+  },
 });
-export const { setOnlineUsers,setMessages } = chatSlice.actions;
+export const { setOnlineUsers, setMessages, deleteMessage } = chatSlice.actions;
 
 export default chatSlice.reducer;
