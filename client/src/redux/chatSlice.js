@@ -13,10 +13,7 @@ const chatSlice = createSlice({
       state.messages = Array.isArray(action.payload) ? action.payload : []; // Ensure payload is an array
     },
     deleteMessage: (state, action) => {
-      // Remove the message from the messages array by filtering it out
-      state.messages = state.messages.filter(
-        (msg) => msg._id !== action.payload
-      );
+        state.messages = state.messages.filter(msg => msg._id !== action.payload);
     },
   },
 });
