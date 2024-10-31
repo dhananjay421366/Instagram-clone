@@ -9,7 +9,7 @@ import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { Badge } from './ui/badge';
-import { CommentDialog } from './commentDialog';
+import {CommentDialog} from "./CommentDialog"; // Adjust based on actual file name
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { selectedPost, setPost } from '@/redux/postSlice';
