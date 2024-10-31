@@ -27,10 +27,13 @@ import cookieParser from "cookie-parser";
 import userRoutes from "./routes/user.routes.js";
 import postRoutes from "./routes/post.routes.js";
 import msgRoutes from "./routes/message.routes.js";
+import path from "path";
 
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 
+const _dirname = path.resolve();
+console.log(_dirname);
 
 // Create Express app instance
 const app = express();
@@ -53,5 +56,9 @@ app.use(
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/posts", postRoutes);
 app.use("/api/v1/message", msgRoutes);
+app.use(express.static(path.join(_dirname, "/client/dist")));
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(_dirname, "client", "dist", "index.html"));
+});
 
 export { app };
