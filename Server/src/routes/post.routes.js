@@ -32,7 +32,7 @@ router
 router.route("/:id/deletepost").delete(deletePost);
 router.route("/mypost").get(getMyPost);
 
-router.route("/toggle/:id/bookmark").patch(bookMarkPost);
+router.route("/toggle/:id/bookmark").get(bookMarkPost);
 router.route("/:id/addcomment").post(addComment);
 router.route("/:id/like").post(likePost);
 router.route("/:id/dislike").post(disLikePost);

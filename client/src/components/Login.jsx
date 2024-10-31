@@ -1,124 +1,83 @@
 
-import React, { useState } from 'react'
-import { Input } from './ui/input'
-import { Label } from './ui/label'
-import { Button } from './ui/button'
-import axios from 'axios'
-import { toast } from 'sonner'
-import { Link, useNavigate } from 'react-router-dom'
-import { Loader2 } from 'lucide-react'
-import { useDispatch } from 'react-redux'
-import { setAuthUser } from '@/redux/AuthSlice'
-import { selectedPost, setPost } from '@/redux/postSlice'
-
+import React, { useState } from 'react';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Button } from './ui/button';
+import axios from 'axios';
+import { toast } from 'sonner';
+import { Link, useNavigate } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
+import { useDispatch } from 'react-redux';
+import { setAuthUser } from '@/redux/AuthSlice';
+import '../css/login.css'
 
 export const Login = () => {
-    const [form, setFormData] = useState({
-        email: "",
-        password: ""
-    })
-    const [loading, setLoading] = useState(false)
+    const [form, setFormData] = useState({ email: "", password: "" });
+    const [loading, setLoading] = useState(false);
 
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
     const HandleSubmit = async (e) => {
-        e.preventDefault()
-        // console.log(form);
+        e.preventDefault();
         try {
-            // console.log(form)
-            setLoading(true)
+            setLoading(true);
             const res = await axios.post('/api/v1/users/login', form, {
-                Headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 withCredentials: true
-            })
+            });
             if (res.data.success) {
-                dispatch(setAuthUser(res.data))
-                navigate("/home")
-                toast.success(res.data.message, {
-                    duration: 2000, // 2 seconds
-                })
-
-
-
+                dispatch(setAuthUser(res.data));
+                navigate("/home");
+                toast.success(res.data.message, { duration: 2000 });
             }
         } catch (error) {
-            console.log(error);
-            toast.error(error.res.data.message, {
-                duration: 2000, // 2 seconds
-            });
+            console.error(error);
+            toast.error(error.response?.data?.message || "Login failed", { duration: 2000 });
         } finally {
             setLoading(false);
-            setFormData({
-                email: "",
-                password: "",
-            });
+            setFormData({ email: "", password: "" });
         }
-    }
-    return (
+    };
 
-        <div className="md:flex items-center p-12 ml-2 w-screen h-screen gap-4 justify-center">
-            <div class="xamitd3 xm2v1qs object-cover  hidden md:flex x322q5f xx54hvc x1vk3w4 xuyhj88 xod5an3 x1gja9t xcd7kps xkxfa8k">
-                <div class="x1qjc9v5 x972fbf xcfux6l x1qhh985 xm0m39n x9f619 x78zum5 xdt5ytf x2lah0s xk390pu x18mmtl5 x1rcfgkt xexx8yu x4uap5 x18d9i69 xkhd6sd x1n2onr6 x11njtxf">
-                    <img
-                        alt=""
-                        class="x972fbf xcfux6l x1qhh985 xm0m39n xk390pu xns55qn xu96u03 xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x10l6tqk x13vifvy x11njtxf xqyf9gi xg01cxk x1rkc77x x19991ni x9lcvmn xnpuxes"
-                        src="/public/loginpageImages.jpg"
+    return (
+        <div id="wrapper" className="flex items-center justify-center h-screen">
+            <div className="main-content shadow-lg p-10 bg-white rounded-lg max-w-sm w-full text-center">
+                <div className="header mb-8">
+                    <img src="https://i.imgur.com/zqpwkLQ.png" alt="App Logo" className="mx-auto w-32" />
+                    <p className="text-gray-500 mt-2">Log in to your account</p>
+                </div>
+                <div className="l-part">
+                    <Input
+                        type="email"
+                        className="input-1 w-full p-3 border border-gray-300 rounded-lg mb-4  input-black-text"
+                        placeholder="Email"
+                        value={form.email}
+                        onChange={(e) => setFormData({ ...form, email: e.target.value })}
+                        
                     />
-                    <img
-                        alt=""
-                        class="x972fbf xcfux6l x1qhh985 xm0m39n xk390pu xns55qn xu96u03 xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x10l6tqk x13vifvy x11njtxf xqyf9gi x1hc1fzr x1rkc77x x19991ni x1lizcpb xnpuxes xhtitgo"
-                        src="/images/instagram/xig/homepage/screenshots/screenshot2-2x.png?__d=www"
-                    />
-                    <img
-                        alt=""
-                        class="x972fbf xcfux6l x1qhh985 xm0m39n xk390pu xns55qn xu96u03 xdj266r x11i5rnm xat24cr x1mh8g0r xg01cxk xexx8yu x4uap5 x18d9i69 xkhd6sd x10l6tqk x13vifvy x11njtxf xlshs6z xqyf9gi"
-                        src="/images/instagram/xig/homepage/screenshots/screenshot3-2x.png?__d=www"
-                    />
-                    <img
-                        alt=""
-                        class="x972fbf xcfux6l x1qhh985 xm0m39n xk390pu xns55qn xu96u03 xdj266r x11i5rnm xat24cr x1mh8g0r xg01cxk xexx8yu x4uap5 x18d9i69 xkhd6sd x10l6tqk x13vifvy x11njtxf xlshs6z xqyf9gi"
-                        src="/images/instagram/xig/homepage/screenshots/screenshot4-2x.png?__d=www"
-                    />
+                    <div className="overlap-text relative mb-6">
+                        <Input
+                            type="password"
+                            className="input-2 w-full p-3 border border-gray-300 rounded-lg input-black-text"
+                            placeholder="Password"
+                            value={form.password}
+                            onChange={(e) => setFormData({ ...form, password: e.target.value })}
+                        />
+                        <Link to="/forgot-password" className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-blue-500">Forgot?</Link>
+                    </div>
+                    <Button
+                        className="btn w-full bg-blue-500 text-white font-bold py-3 rounded-lg hover:bg-blue-600 transition-all"
+                        onClick={HandleSubmit}
+                        disabled={loading}
+                    >
+                        {loading ? <Loader2 className="mr-2 h-4 animate-spin" /> : "Log in"}
+                    </Button>
+                </div>
+                <div className="sub-content mt-4 text-gray-500">
+                    Don’t have an account? <Link to="/signup" className="text-blue-500">Sign up</Link>
                 </div>
             </div>
-
-            <form action="" className='shadow-lg shadow-white flex flex-col gap-5 p-8'>
-                <div className=''>
-                    <h1 className='text-center font-bold text-xl'>Logo</h1>
-                    <p className='text-sm text-center'>Login to see photos & videos from your friend</p>
-                </div>
-                <div className="">
-                    <Label className=" font-medium">Email</Label>
-                    <Input type="email"
-                        value={form.email}
-                        name="email"
-                        className="focus-visible:ring-transparent text-black  my-2"
-                        placeholder="Email"
-                        onChange={(e) => setFormData({ ...form, email: e.target.value })}
-                    />
-
-                </div>
-                <div className="">
-                    <Label className=" font-medium">Password</Label>
-                    <Input type="password"
-                        className="focus-visible:ring-transparent text-black  my-2"
-                        placeholder="password"
-                        id="password"
-                        value={form.password}
-                        name="password"
-                        onChange={(e) => setFormData({ ...form, password: e.target.value })}
-                    />
-                </div>
-                {
-                    loading ? <Button>
-                        <Loader2 className="mr-2 h-4" />
-                    </Button> :
-                        <Button onClick={HandleSubmit} type="submit">Login</Button>
-                }
-                <span className='text-center'>Dosen't have an  account ? <Link className='text-blue-600' to={"/signup"}>Signup</Link></span>
-            </form>
         </div>
-    )
-}
+    );
+};

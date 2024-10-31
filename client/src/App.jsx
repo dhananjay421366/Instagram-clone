@@ -87,8 +87,8 @@ function App() {
           }
         />
         <Route path="/account/edit" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
-        <Route path="/:id/profile" element={<Profile />} />
-        <Route path="/chat" element={<Chatpage />} />
+        <Route path="/:id/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/chat" element={<ProtectedRoute><Chatpage /></ProtectedRoute>} />
       </Route>
     )
   );

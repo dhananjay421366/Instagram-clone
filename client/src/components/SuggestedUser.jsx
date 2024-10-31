@@ -1,8 +1,8 @@
-
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 // Utility function to shuffle an array
 const shuffleArray = (array) => {
@@ -15,22 +15,51 @@ const shuffleArray = (array) => {
 };
 
 export const SuggestedUser = () => {
-  const { suggestedUser } = useSelector((store) => store.auth);
+  const { suggestedUser, user } = useSelector((store) => store.auth); // Ensure `user` is the logged-in user
   const [showAll, setShowAll] = useState(false);
   const [shuffledUsers, setShuffledUsers] = useState([]);
+  const [followStatus, setFollowStatus] = useState({}); // Track follow status for each user
 
-  // Effect to shuffle users when suggestedUser changes (e.g., when profile picture is updated)
   useEffect(() => {
     if (suggestedUser && suggestedUser.users && suggestedUser.users.length > 0) {
-      setShuffledUsers(shuffleArray(suggestedUser.users)); // Shuffle users on component mount or when suggestedUser changes
+      // Shuffle users and set follow status on mount or when suggestedUser changes
+      setShuffledUsers(shuffleArray(suggestedUser.users));
+
+      const initialStatus = suggestedUser.users.reduce((acc, user) => {
+        acc[user._id] = user.isFollowed; // Assume `isFollowed` indicates follow status from the API
+        return acc;
+      }, {});
+      setFollowStatus(initialStatus);
     }
-  }, [suggestedUser]); // Re-run this effect when suggestedUser changes
+  }, [suggestedUser]);
 
   if (!shuffledUsers || shuffledUsers.length === 0) {
-    return null; // Handle case where no suggested users are available
+    return null;
   }
 
-  // Toggle between 5 users and all users
+  const handleFollowToggle = async (targetUserId) => {
+    try {
+      // Send follow/unfollow request
+      const response = await axios.post(
+        `/api/v1/users/followunfollow/${targetUserId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`, // Include auth token if required
+          },
+        }
+      );
+
+      // Toggle follow status in UI based on API response
+      setFollowStatus((prevStatus) => ({
+        ...prevStatus,
+        [targetUserId]: !prevStatus[targetUserId],
+      }));
+    } catch (error) {
+      console.error("Error following/unfollowing user:", error);
+    }
+  };
+
   const displayedUsers = showAll ? shuffledUsers : shuffledUsers.slice(0, 5);
 
   return (
@@ -41,7 +70,7 @@ export const SuggestedUser = () => {
           className="font-semibold text-gray-500"
           onClick={() => setShowAll(!showAll)}
         >
-          {showAll ? 'Show Less' : 'See All'}
+          {showAll ? "Show Less" : "See All"}
         </button>
       </div>
       {displayedUsers.map((user) => (
@@ -54,31 +83,31 @@ export const SuggestedUser = () => {
                     <AvatarImage
                       src={user?.profilePicture}
                       alt="profile_image"
-                      loading="lazy" // Lazy load the image for better performance
+                      loading="lazy"
                     />
                   ) : (
-                    <AvatarFallback>CN</AvatarFallback> // Fallback if no image
+                    <AvatarFallback>CN</AvatarFallback>
                   )}
                 </Avatar>
               </Link>
               <div className="flex flex-col">
                 <h1 className="font-semibold text-sm">
-                  <Link to={`/${user?._id}/profile`}>
-                    {user?.username}
-                  </Link>
+                  <Link to={`/${user?._id}/profile`}>{user?.username}</Link>
                 </h1>
-                <span className="text-sm">
-                  {user?.Bio || 'No bio available'}
-                </span>
+                <span className="text-sm">{user?.Bio || "No bio available"}</span>
               </div>
             </div>
-            <span className="text-[#6aadda] text-xs font-bold cursor-pointer hover:text-[#3b9bdb]">
-              Follow
-            </span>
+            <button
+              className={`text-xs font-bold cursor-pointer ${
+                followStatus[user._id] ? "text-red-500" : "text-[#6aadda]"
+              } hover:text-[#3b9bdb]`}
+              onClick={() => handleFollowToggle(user._id)}
+            >
+              {followStatus[user._id] ? "Unfollow" : "Follow"}
+            </button>
           </div>
         </div>
       ))}
     </div>
   );
 };
-

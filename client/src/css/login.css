@@ -1,0 +1,64 @@
+/* login.css */
+@import url('https://fonts.googleapis.com/css?family=Indie+Flower|Overpass+Mono|Roboto');
+
+body, #wrapper {
+    font-family: 'Roboto', sans-serif;
+    /* background-color: #f9fafb; */
+}
+
+#wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.main-content {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    /* background: #ffffff; */
+}
+
+.header img {
+    width: 100px;
+}
+
+.input-1, .input-2 {
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    font-size: 0.875rem;
+}
+
+.btn {
+    font-size: 1rem;
+    padding: 0.75rem;
+    background-color: #2563eb;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #1e3a8a;
+}
+
+.sub-content {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-top: 1rem;
+}
+
+.sub-content a {
+    color: #2563eb;
+    text-decoration: none;
+}
+.input-black-text {
+    color: black;
+  }
