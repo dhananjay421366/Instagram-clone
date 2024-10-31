@@ -59,7 +59,7 @@ export const Signup = () => {
 
     return (
         <GoogleOAuthProvider clientId="1046899819868-3gpeq1fko89aeaa2sntvmpcrqlgf52k7.apps.googleusercontent.com">
-            <div className="signup-container">
+            <div className="signup-container md:mx-[600px]">
                 <div className="signup-box">
                     <header>
                         <h2>Instagram</h2>
