@@ -48,7 +48,7 @@ const Messages = ({ selectedUser }) => {
                         <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
                     <span>{selectedUser?.username}</span>
-                    <Link to={`/profile/${selectedUser?._id}`}>
+                    <Link to={`/${selectedUser?._id}/profile` }>
                         <Button className="h-8 my-2" variant="secondary">View profile</Button>
                     </Link>
                 </div>

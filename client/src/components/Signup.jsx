@@ -62,7 +62,7 @@ export const Signup = () => {
             <div className="signup-container md:mx-[600px]">
                 <div className="signup-box">
                     <header>
-                        <h2>Instagram</h2>
+                        <h2>VisualSnap</h2>
                         <p>Sign up to see photos and videos from your friends.</p>
                         <GoogleLogin
                             onSuccess={handleGoogleLoginSuccess}
@@ -85,7 +85,7 @@ export const Signup = () => {
                         <Input
                             type="text"
                             name="email"
-                            placeholder="Mobile Number or Email"
+                            placeholder="Email"
                             value={form.email}
                             onChange={handleInputChange}
                             className="input-black-text"

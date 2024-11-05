@@ -44,7 +44,6 @@ export const Login = () => {
         <div id="wrapper" className="flex items-center justify-center h-screen">
             <div className="main-content shadow-lg p-10 bg-white rounded-lg max-w-sm w-full text-center">
                 <div className="header mb-8">
-                    <img src="https://i.imgur.com/zqpwkLQ.png" alt="App Logo" className="mx-auto w-32" />
                     <p className="text-gray-500 mt-2">Log in to your account</p>
                 </div>
                 <div className="l-part">
